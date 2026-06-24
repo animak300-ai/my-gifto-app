@@ -3,89 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подарки здесь!</title>
-    <script src="https://telegram.org/js/telegram-web-apps.js"></script>
+    <title>Подарок</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            background: linear-gradient(135deg, #1e1e2f, #252542);
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        h1 { font-size: 24px; text-align: center; margin-bottom: 10px; }
-        .gift-container { position: relative; cursor: pointer; }
-        .gift { font-size: 100px; transition: transform 0.3s; }
-        .gift.shake { animation: shake 0.5s ease-in-out infinite; }
-        @keyframes shake {
-            0% { transform: rotate(0deg); }
-            20% { transform: rotate(-10deg); }
-            40% { transform: rotate(10deg); }
-            60% { transform: rotate(-10deg); }
-            80% { transform: rotate(10deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .btn {
-            background: #2ea6ff;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-weight: bold;
-            display: none;
-            cursor: pointer;
-        }
-        .win-text { font-size: 22px; color: #ffeb3b; font-weight: bold; margin-top: 20px; text-align: center; min-height: 30px; }
+        body { background: #1c1c27; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; margin: 0; }
+        #box { font-size: 100px; cursor: pointer; transition: transform 0.2s; }
+        #box:active { transform: scale(0.8); }
     </style>
 </head>
 <body>
-
-    <h1 id="title">Нажми на коробку, чтобы открыть подарок!</h1>
-    
-    <div class="gift-container" onclick="openGift()">
-        <div id="giftBox" class="gift">🎁</div>
-    </div>
-
-    <div id="winText" class="win-text"></div>
-    <button id="closeBtn" class="btn" onclick="closeApp()">Забрать и выйти</button>
+    <div id="text">Нажми на коробку!</div>
+    <div id="box">🎁</div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); 
-
-        let opened = false;
-
-        function openGift() {
-            if (opened) return;
-            opened = true;
-
-            const gift = document.getElementById('giftBox');
-            const winText = document.getElementById('winText');
-            const title = document.getElementById('title');
-            const closeBtn = document.getElementById('closeBtn');
-
-            gift.classList.add('shake');
-            title.innerText = "Открываем...";
-
-            setTimeout(() => {
-                gift.classList.remove('shake');
-                gift.innerText = "🎉"; 
-                title.innerText = "Поздравляем!";
-                winText.innerText = "Ты выиграл: Бесплатный VIP-Доступ!"; 
-                closeBtn.style.display = "block"; 
-            }, 1500);
-        }
-
-        function closeApp() {
-            tg.close(); 
-        }
+        tg.ready();
+        
+        document.getElementById('box').addEventListener('click', () => {
+            tg.HapticFeedback.impactOccurred('heavy'); // Вибрация
+            document.getElementById('box').innerText = '🎉';
+            document.getElementById('text').innerText = 'Подарок открыт!';
+        });
     </script>
 </body>
 </html>
